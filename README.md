@@ -1,23 +1,84 @@
-Hi everyone,
+# Intelligent B.Tech Branch Selection Mapping System
 
-I have started developing an initial-stage intelligent B.Tech Branch Selection Mapping System as part of my contribution to help B.Tech aspirants and newly enrolled students during counselling and branch selection. This initiative is completely non-profit and intended purely for student guidance and academic support.
+## About the Project
 
-The objective of this system is to guide students in selecting suitable engineering branches based on:
-• favourite subjects
-• areas of interest (AOI)
-• aptitude and strengths
-• personality traits
-• career goals and dream jobs
+This project is an initial-stage **Intelligent B.Tech Branch Selection Mapping System** developed as a contribution to help **B.Tech aspirants** and **newly enrolled students** during counselling and branch selection.
 
-Currently, the system is in its early development stage, and many mappings still need refinement, validation, and accurate real-world updates.
+This initiative is completely **non-profit** and intended purely for:
+- student guidance
+- academic support
+- research-oriented counselling assistance
 
-I sincerely request your support, feedback, suggestions, and critical review to improve this system further. I also encourage students, faculty members, and professionals to contribute by:
-• correcting inaccurate mappings
-• improving subject-to-branch relationships
-• updating industry trends and career paths
-• suggesting missing skills, branches, or opportunities
-• enhancing the overall accuracy of the counselling framework
+The primary objective of this system is to help students identify suitable engineering branches based on multiple personal and academic factors rather than selecting branches only based on trends or external pressure.
 
-The main goal is to build a useful, research-oriented, and student-friendly guidance system that can genuinely help students make better B.Tech branch decisions based on their strengths and interests rather than confusion or trends alone.
+---
 
-Your valuable feedback and collaborative support will help improve the quality and usefulness of this initiative. Thank you.
+# Objectives
+
+The system aims to guide students in selecting appropriate engineering branches based on:
+
+- Favourite subjects
+- Areas of Interest (AOI)
+- Aptitude and strengths
+- Personality traits
+- Career goals
+- Dream jobs and future aspirations
+
+---
+
+# Current Development Status
+
+The project is currently in its **early development stage**.
+
+Many mappings and relationships still require:
+- refinement
+- validation
+- research verification
+- real-world accuracy updates
+
+---
+
+# Contribution & Collaboration Request
+
+Support, feedback, suggestions, and critical review from students, faculty members, researchers, and professionals are highly appreciated.
+
+Contributors can help by:
+
+- Correcting inaccurate mappings
+- Improving subject-to-branch relationships
+- Updating industry trends and career paths
+- Suggesting missing skills, branches, or opportunities
+- Enhancing the overall accuracy of the counselling framework
+
+---
+
+# Vision
+
+The long-term goal is to build a:
+
+- useful
+- research-oriented
+- student-friendly
+- intelligent counselling framework
+
+that genuinely helps students make better B.Tech branch decisions based on:
+- strengths
+- interests
+- aptitude
+- career alignment
+
+instead of confusion, peer pressure, or temporary trends alone.
+
+---
+
+# Non-Profit Initiative
+
+This project is developed purely as a **non-profit educational contribution** for helping students and improving awareness during the engineering admission and counselling process.
+
+---
+
+# Feedback
+
+Your valuable feedback and collaborative support will significantly improve the quality, accuracy, and usefulness of this initiative.
+
+Thank you for your support.
