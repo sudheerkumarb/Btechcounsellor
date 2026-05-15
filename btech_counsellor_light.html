@@ -1,0 +1,1367 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { background: linear-gradient( -45deg, white, #e73c7e, #23a6d5, #23d5ab ); background-size: 400% 400%; animation: gradient 12s ease infinite; min-height: 100vh; } @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+#app {
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  padding: 1.5rem 1rem 3rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.hero {
+  text-align: center;
+  padding: 1.5rem 1rem 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: #E6F1FB;
+  color: #185FA5;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 0.5px solid #B5D4F4;
+  margin-bottom: 0.75rem;
+}
+
+.hero h1 {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 0.3rem;
+  line-height: 1.3;
+}
+
+.hero p {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.progress-wrap {
+  margin-bottom: 1.5rem;
+}
+
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-bottom: 6px;
+}
+
+.progress-track {
+  height: 5px;
+  background: var(--color-background-secondary);
+  border-radius: 3px;
+  border: 0.5px solid var(--color-border-tertiary);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #378ADD;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.step-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--color-background-secondary);
+  border: 0.5px solid var(--color-border-secondary);
+  transition: all 0.2s;
+}
+
+.dot.active { background: #378ADD; border-color: #185FA5; }
+.dot.done { background: #1D9E75; border-color: #0F6E56; }
+
+.panel { display: none; }
+.panel.active {
+  display: block;
+  animation: fadeUp 0.3s ease forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+}
+
+.panel-icon {
+  width: 40px; height: 40px;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.icon-blue { background: #E6F1FB; color: #185FA5; border: 0.5px solid #B5D4F4; }
+.icon-purple { background: #EEEDFE; color: #534AB7; border: 0.5px solid #CECBF6; }
+.icon-teal { background: #E1F5EE; color: #0F6E56; border: 0.5px solid #9FE1CB; }
+.icon-amber { background: #FAEEDA; color: #854F0B; border: 0.5px solid #FAC775; }
+.icon-coral { background: #FAECE7; color: #993C1D; border: 0.5px solid #F5C4B3; }
+
+.panel-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.panel-sub {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  margin-top: 1rem;
+}
+
+.hint { font-size: 12px; color: var(--color-text-tertiary); margin-bottom: 10px; }
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.card-grid.cols2 { grid-template-columns: 1fr 1fr; }
+.card-grid.cols3 { grid-template-columns: repeat(3,1fr); }
+
+.sel-card {
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 12px 10px 10px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--color-background-primary);
+  transition: border-color 0.15s, background 0.15s;
+  position: relative;
+  user-select: none;
+}
+
+.sel-card:hover { border-color: var(--color-border-secondary); background: var(--color-background-secondary); }
+
+.sel-card.selected {
+  border-color: #378ADD;
+  background: #E6F1FB;
+}
+
+.sel-card.selected .check-mark { opacity: 1; }
+
+.check-mark {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: #378ADD;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.card-emoji { font-size: 24px; display: block; margin-bottom: 6px; }
+
+.card-lbl {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  line-height: 1.3;
+}
+
+.field-wrap {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+
+.field-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.field-name { font-size: 13px; color: var(--color-text-primary); }
+.field-val {
+  font-size: 12px;
+  font-weight: 500;
+  color: #185FA5;
+  min-width: 80px;
+  text-align: right;
+}
+
+.range-ends {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  margin-top: 4px;
+}
+
+.select-wrap { position: relative; margin-bottom: 10px; }
+
+select {
+  width: 100%;
+  padding: 10px 36px 10px 12px;
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  background: var(--color-background-primary);
+  color: var(--color-text-primary);
+  font-size: 13px;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  outline: none;
+}
+
+select:hover, select:focus { border-color: var(--color-border-secondary); }
+
+.sel-arrow {
+  position: absolute;
+  right: 10px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+  pointer-events: none;
+  font-size: 14px;
+}
+
+.nav-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 1.25rem;
+}
+
+.btn-back {
+  padding: 10px 20px;
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-back:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
+
+.btn-next {
+  flex: 1;
+  padding: 11px 20px;
+  border: 0.5px solid #185FA5;
+  border-radius: var(--border-radius-md);
+  background: #E6F1FB;
+  color: #185FA5;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-next:hover { background: #B5D4F4; }
+.btn-next:active { transform: scale(0.98); }
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  border: 0.5px solid #185FA5;
+  border-radius: var(--border-radius-md);
+  background: #378ADD;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 1rem;
+}
+
+.btn-primary:hover { background: #185FA5; }
+
+.err-msg {
+  display: none;
+  background: #FCEBEB;
+  border: 0.5px solid #F7C1C1;
+  border-radius: var(--border-radius-md);
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #A32D2D;
+  margin-bottom: 10px;
+}
+
+.divider {
+  height: 0.5px;
+  background: var(--color-border-tertiary);
+  margin: 1.25rem 0;
+}
+
+
+.warning{
+
+  margin-top:30px;
+
+  padding:22px;
+
+  border-radius:20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(245,158,11,0.15),
+      rgba(239,68,68,0.12)
+    );
+
+  border:
+    1px solid rgba(245,158,11,0.35);
+}
+
+.warning h3{
+
+  color: black;
+
+  margin-bottom:10px;
+
+  font-size:18px;
+}
+
+.warning p{
+
+  color: black;
+
+  line-height:1.8;
+
+  font-size:14px;
+}
+.result-hero {
+  text-align: center;
+  padding: 1.25rem;
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  margin-bottom: 1.25rem;
+}
+
+.result-emoji { font-size: 40px; margin-bottom: 8px; }
+
+.result-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 12px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+
+.badge-strong { background: #EAF3DE; color: #27500A; border: 0.5px solid #C0DD97; }
+.badge-moderate { background: #FAEEDA; color: #633806; border: 0.5px solid #FAC775; }
+.badge-weak { background: #FCEBEB; color: #791F1F; border: 0.5px solid #F7C1C1; }
+
+.result-branch {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+
+.match-pct {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.match-pct strong { color: #1D9E75; }
+
+.all-branches-section { margin-bottom: 1.25rem; }
+
+.branch-match-card {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.branch-match-card:hover { border-color: var(--color-border-secondary); }
+.branch-match-card.selected-branch { border-color: #378ADD; background: #E6F1FB; }
+
+.branch-card-left { flex: 1; min-width: 0; }
+
+.branch-card-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.branch-card-meta { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+
+.branch-bar-wrap { width: 90px; flex-shrink: 0; }
+
+.branch-bar-track {
+  height: 5px;
+  background: var(--color-background-secondary);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 3px;
+}
+
+.branch-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+.bar-strong { background: #639922; }
+.bar-moderate { background: #BA7517; }
+.bar-weak { background: #E24B4A; }
+
+.bar-pct { font-size: 10px; color: var(--color-text-secondary); text-align: right; }
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.info-card {
+  background: var(--color-background-secondary);
+  border-radius: var(--border-radius-md);
+  padding: 10px 12px;
+}
+
+.info-card-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-text-tertiary);
+  margin-bottom: 4px;
+}
+
+.info-card-value { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+
+.rank-section {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.rank-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.rank-sub { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 1rem; }
+
+.rank-input-row { display: flex; gap: 8px; }
+
+input[type="number"] {
+  flex: 1;
+  padding: 10px 12px;
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  background: var(--color-background-primary);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+input[type="number"]:focus { border-color: #378ADD; box-shadow: 0 0 0 2px rgba(55,138,221,0.15); }
+
+.btn-rank {
+  padding: 10px 20px;
+  border: 0.5px solid #185FA5;
+  border-radius: var(--border-radius-md);
+  background: #378ADD;
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.btn-rank:hover { background: #185FA5; }
+
+.college-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  background: var(--color-background-primary);
+  margin-bottom: 8px;
+  transition: border-color 0.15s;
+}
+
+.college-item:hover { border-color: var(--color-border-secondary); }
+
+.college-rank-num {
+  font-size: 18px;
+  font-weight: 500;
+  color: #BA7517;
+  min-width: 28px;
+  line-height: 1;
+}
+
+.college-info { flex: 1; min-width: 0; }
+.college-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.college-loc { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+.college-details { font-size: 11px; color: var(--color-text-tertiary); margin-top: 3px; }
+
+.tier-badge {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.t-govt { background: #EAF3DE; color: #27500A; border: 0.5px solid #C0DD97; }
+.t-auto { background: #E6F1FB; color: #0C447C; border: 0.5px solid #B5D4F4; }
+.t-pvt { background: #FAEEDA; color: #633806; border: 0.5px solid #FAC775; }
+
+.no-college {
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  border: 0.5px dashed var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  background: var(--color-background-secondary);
+}
+
+.btn-restart {
+  width: 100%;
+  padding: 10px;
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 10px;
+}
+
+.btn-restart:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
+
+.skills-section { margin-bottom: 1rem; }
+
+.skill-item { margin-bottom: 10px; }
+
+.skill-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-bottom: 4px;
+}
+
+.skill-track {
+  height: 5px;
+  background: var(--color-background-secondary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.skill-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.8s ease;
+}
+
+.sf-blue { background: #378ADD; }
+.sf-teal { background: #1D9E75; }
+.sf-purple { background: #7F77DD; }
+
+.rank-result-note {
+  background: var(--color-background-secondary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+</style>
+
+<div id="app">
+  <center>
+  <h1 class="sr-only">B.Tech branch counselling tool for students </h1>
+</center>
+ <div class="warning">
+
+      <h3>
+        ⚠ Experimental Recommendation System
+      </h3>
+
+      <p>
+        This counselling tool is currently in an early-stage
+        experimental phase.
+
+        Recommendations may contain inaccuracies,
+        incomplete mappings, or evolving industry assumptions.
+
+        Do NOT make final counselling decisions based only
+        on this tool.
+
+        Please consult official counselling experts,
+        professors, seniors, mentors, and placement statistics
+        before selecting a branch.
+
+        This platform will improve continuously
+        using future feedback and AI-assisted refinement. <b>Send the feedback to sudheerkumar.utas@gmail.com with subject: B.Tech Counsellor Selection </b>
+      </p>
+
+    </div>
+  <div class="hero">
+    <div class="hero-badge"><i class="ti ti-school" style="font-size:12px;margin-right:4px" aria-hidden="true"></i> B.Tech Branch Counsellor · Telangana 2026</div>
+    <h1>Find your ideal engineering branch</h1>
+    <p>Answer 5 quick steps — get personalised branch matches &amp; Telangana college recommendations</p>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span id="step-lbl">Step 1 of 5</span>
+      <span id="step-pct">20%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="prog" style="width:20%"></div>
+    </div>
+    <div class="step-dots" id="dots"></div>
+  </div>
+
+  <div id="err" class="err-msg"></div>
+
+  <div class="panel active" id="s1">
+    <div class="panel-header">
+      <div class="panel-icon icon-blue"><i class="ti ti-book" aria-hidden="true"></i></div>
+      <div>
+        <div class="panel-title">Favourite subjects</div>
+        <div class="panel-sub">Select all that you genuinely enjoyed</div>
+      </div>
+    </div>
+    <div class="section-label">Intermediate MPC subjects</div>
+    <div class="card-grid" id="mpc-g">
+      <div class="sel-card" data-g="mpc" data-v="math" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">📐</span><div class="card-lbl">Mathematics</div></div>
+      <div class="sel-card" data-g="mpc" data-v="phy_mech" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">⚙️</span><div class="card-lbl">Physics – Mechanics</div></div>
+      <div class="sel-card" data-g="mpc" data-v="phy_elec" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">⚡</span><div class="card-lbl">Physics – Electricity</div></div>
+      <div class="sel-card" data-g="mpc" data-v="phy_comm" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">📡</span><div class="card-lbl">Physics – Signals</div></div>
+      <div class="sel-card" data-g="mpc" data-v="chem" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🧪</span><div class="card-lbl">Chemistry</div></div>
+      <div class="sel-card" data-g="mpc" data-v="cs" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">💻</span><div class="card-lbl">Computer Science</div></div>
+    </div>
+    <div class="section-label">10th class subjects</div>
+    <div class="card-grid">
+      <div class="sel-card" data-g="tenth" data-v="draw" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🎨</span><div class="card-lbl">Drawing &amp; Arts</div></div>
+      <div class="sel-card" data-g="tenth" data-v="social" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🌍</span><div class="card-lbl">Social Studies</div></div>
+      <div class="sel-card" data-g="tenth" data-v="bio" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🧬</span><div class="card-lbl">Biology</div></div>
+      <div class="sel-card" data-g="tenth" data-v="geo" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🗺️</span><div class="card-lbl">Geography</div></div>
+      <div class="sel-card" data-g="tenth" data-v="eco" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">📊</span><div class="card-lbl">Economics</div></div>
+      <div class="sel-card" data-g="tenth" data-v="lang" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">📖</span><div class="card-lbl">Languages</div></div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-next" onclick="go(1)">Next: Interests <i class="ti ti-arrow-right" style="font-size:13px;vertical-align:-1px" aria-hidden="true"></i></button>
+    </div>
+  </div>
+
+  <div class="panel" id="s2">
+    <div class="panel-header">
+      <div class="panel-icon icon-purple"><i class="ti ti-heart" aria-hidden="true"></i></div>
+      <div>
+        <div class="panel-title">Areas of interest</div>
+        <div class="panel-sub">Pick all topics that genuinely excite you</div>
+      </div>
+    </div>
+    <div class="card-grid" id="aoi-g">
+      <div class="sel-card" data-g="aoi" data-v="coding" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">👨‍💻</span><div class="card-lbl">Coding &amp; Algorithms</div></div>
+      <div class="sel-card" data-g="aoi" data-v="ai" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🤖</span><div class="card-lbl">AI &amp; Machine Learning</div></div>
+      <div class="sel-card" data-g="aoi" data-v="cyber" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🔐</span><div class="card-lbl">Cyber Security</div></div>
+      <div class="sel-card" data-g="aoi" data-v="electronics" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🔌</span><div class="card-lbl">Electronics</div></div>
+      <div class="sel-card" data-g="aoi" data-v="power" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">⚡</span><div class="card-lbl">Power &amp; Electrical</div></div>
+      <div class="sel-card" data-g="aoi" data-v="machines" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🔧</span><div class="card-lbl">Machines &amp; Engines</div></div>
+      <div class="sel-card" data-g="aoi" data-v="robotics" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🦾</span><div class="card-lbl">Robotics</div></div>
+      <div class="sel-card" data-g="aoi" data-v="construction" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🏗️</span><div class="card-lbl">Buildings &amp; Infrastructure</div></div>
+      <div class="sel-card" data-g="aoi" data-v="space" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🚀</span><div class="card-lbl">Space &amp; Aeronautics</div></div>
+      <div class="sel-card" data-g="aoi" data-v="chemical" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">⚗️</span><div class="card-lbl">Chemical Processes</div></div>
+      <div class="sel-card" data-g="aoi" data-v="health" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🏥</span><div class="card-lbl">Healthcare &amp; Biomedical</div></div>
+      <div class="sel-card" data-g="aoi" data-v="environment" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🌱</span><div class="card-lbl">Environment &amp; Green Tech</div></div>
+      <div class="sel-card" data-g="aoi" data-v="gaming" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🎮</span><div class="card-lbl">Gaming &amp; Animation</div></div>
+      <div class="sel-card" data-g="aoi" data-v="data" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">📈</span><div class="card-lbl">Data &amp; Analytics</div></div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="back(2)"><i class="ti ti-arrow-left" style="font-size:13px;vertical-align:-1px" aria-hidden="true"></i> Back</button>
+      <button class="btn-next" onclick="go(2)">Next: Hobbies &amp; aptitude <i class="ti ti-arrow-right" style="font-size:13px;vertical-align:-1px" aria-hidden="true"></i></button>
+    </div>
+  </div>
+
+  <div class="panel" id="s3">
+    <div class="panel-header">
+      <div class="panel-icon icon-teal"><i class="ti ti-mood-happy" aria-hidden="true"></i></div>
+      <div>
+        <div class="panel-title">Hobbies &amp; aptitude</div>
+        <div class="panel-sub">What do you love doing &amp; what are you naturally good at?</div>
+      </div>
+    </div>
+    <div class="section-label">Your hobbies</div>
+    <div class="card-grid">
+      <div class="sel-card" data-g="hobby" data-v="gaming_h" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🎯</span><div class="card-lbl">Gaming &amp; Strategy</div></div>
+      <div class="sel-card" data-g="hobby" data-v="tinkering" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🛠️</span><div class="card-lbl">Tinkering &amp; Building</div></div>
+      <div class="sel-card" data-g="hobby" data-v="reading" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">📚</span><div class="card-lbl">Reading &amp; Research</div></div>
+      <div class="sel-card" data-g="hobby" data-v="art_h" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">✏️</span><div class="card-lbl">Art &amp; Design</div></div>
+      <div class="sel-card" data-g="hobby" data-v="puzzles" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🧩</span><div class="card-lbl">Puzzles &amp; Quizzes</div></div>
+      <div class="sel-card" data-g="hobby" data-v="outdoors" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🏕️</span><div class="card-lbl">Outdoors &amp; Nature</div></div>
+      <div class="sel-card" data-g="hobby" data-v="social_m" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">📱</span><div class="card-lbl">Social Media &amp; Content</div></div>
+      <div class="sel-card" data-g="hobby" data-v="music" onclick="tog(this)"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🎵</span><div class="card-lbl">Music &amp; Audio</div></div>
+    </div>
+    <div class="section-label">Natural aptitudes — rate your strength</div>
+    <div class="field-wrap">
+      <div class="field-row"><span class="field-name">🔍 Logical problem solving</span><span class="field-val" id="lv">Medium</span></div>
+      <input type="range" min="1" max="3" value="2" step="1" id="la" oninput="rng('lv',this.value)">
+      <div class="range-ends"><span>Average</span><span>Very strong</span></div>
+    </div>
+    <div class="field-wrap">
+      <div class="field-row"><span class="field-name">🎨 Creativity &amp; innovation</span><span class="field-val" id="cv">Medium</span></div>
+      <input type="range" min="1" max="3" value="2" step="1" id="ca" oninput="rng('cv',this.value)">
+      <div class="range-ends"><span>Average</span><span>Very strong</span></div>
+    </div>
+    <div class="field-wrap">
+      <div class="field-row"><span class="field-name">🔧 Hands-on practical skills</span><span class="field-val" id="hv">Medium</span></div>
+      <input type="range" min="1" max="3" value="2" step="1" id="ha" oninput="rng('hv',this.value)">
+      <div class="range-ends"><span>Average</span><span>Very strong</span></div>
+    </div>
+    <div class="field-wrap">
+      <div class="field-row"><span class="field-name">🔬 Research &amp; analytical thinking</span><span class="field-val" id="rv">Medium</span></div>
+      <input type="range" min="1" max="3" value="2" step="1" id="ra" oninput="rng('rv',this.value)">
+      <div class="range-ends"><span>Average</span><span>Very strong</span></div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="back(3)"><i class="ti ti-arrow-left" style="font-size:13px;vertical-align:-1px" aria-hidden="true"></i> Back</button>
+      <button class="btn-next" onclick="go(3)">Next: Dream job <i class="ti ti-arrow-right" style="font-size:13px;vertical-align:-1px" aria-hidden="true"></i></button>
+    </div>
+  </div>
+
+  <div class="panel" id="s4">
+    <div class="panel-header">
+      <div class="panel-icon icon-amber"><i class="ti ti-briefcase" aria-hidden="true"></i></div>
+      <div>
+        <div class="panel-title">Career &amp; work culture</div>
+        <div class="panel-sub">Where do you see yourself in 10 years?</div>
+      </div>
+    </div>
+    <div class="section-label">Dream job domain</div>
+    <div class="select-wrap">
+      <select id="djob">
+        <option value="">— Select your dream job type —</option>
+        <option value="software">Software Engineer / App Developer</option>
+        <option value="ai_job">AI / ML Engineer / Data Scientist</option>
+        <option value="hacker">Cyber Security Analyst / Ethical Hacker</option>
+        <option value="vlsi">VLSI / Embedded Systems Engineer</option>
+        <option value="power_eng">Power Systems / Electrical Engineer</option>
+        <option value="mech_job">Mechanical Design / Manufacturing Engineer</option>
+        <option value="robotics_job">Robotics / Automation Engineer</option>
+        <option value="civil_job">Structural / Civil Engineer</option>
+        <option value="space_job">Aerospace / Defence Engineer</option>
+        <option value="chem_job">Process / Chemical Engineer</option>
+        <option value="bio_job">Biomedical Scientist / Researcher</option>
+        <option value="env_job">Environmental / Sustainability Engineer</option>
+        <option value="game_job">Game Developer / Animator</option>
+        <option value="startup">Tech Entrepreneur / Startup Founder</option>
+        <option value="research">Research Scientist / Professor</option>
+        <option value="govt">UPSC / Government / PSU</option>
+      </select>
+      <span class="sel-arrow"><i class="ti ti-chevron-down" aria-hidden="true"></i></span>
+    </div>
+    <div class="section-label">Preferred work culture</div>
+    <div class="card-grid cols2">
+      <div class="sel-card" data-g="culture" data-v="startup" onclick="single(this,'culture')"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🚀</span><div class="card-lbl">Startup / fast-paced</div></div>
+      <div class="sel-card" data-g="culture" data-v="mnc" onclick="single(this,'culture')"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🏢</span><div class="card-lbl">MNC / Big Tech</div></div>
+      <div class="sel-card" data-g="culture" data-v="research" onclick="single(this,'culture')"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🔬</span><div class="card-lbl">R&amp;D / Academia</div></div>
+      <div class="sel-card" data-g="culture" data-v="govt" onclick="single(this,'culture')"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🏛️</span><div class="card-lbl">Govt / PSU / DRDO</div></div>
+    </div>
+    <div class="section-label">Preferred work style</div>
+    <div class="card-grid cols2">
+      <div class="sel-card" data-g="style" data-v="desk" onclick="single(this,'style')"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🖥️</span><div class="card-lbl">Desk / screen work</div></div>
+      <div class="sel-card" data-g="style" data-v="field" onclick="single(this,'style')"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🏭</span><div class="card-lbl">Field / hands-on</div></div>
+      <div class="sel-card" data-g="style" data-v="lab" onclick="single(this,'style')"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🧫</span><div class="card-lbl">Lab / research</div></div>
+      <div class="sel-card" data-g="style" data-v="anywhere" onclick="single(this,'style')"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🌏</span><div class="card-lbl">Remote / anywhere</div></div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="back(4)"><i class="ti ti-arrow-left" style="font-size:13px;vertical-align:-1px" aria-hidden="true"></i> Back</button>
+      <button class="btn-next" onclick="go(4)">Next: Academics <i class="ti ti-arrow-right" style="font-size:13px;vertical-align:-1px" aria-hidden="true"></i></button>
+    </div>
+  </div>
+
+  <div class="panel" id="s5">
+    <div class="panel-header">
+      <div class="panel-icon icon-coral"><i class="ti ti-chart-bar" aria-hidden="true"></i></div>
+      <div>
+        <div class="panel-title">Academic performance</div>
+        <div class="panel-sub">Helps us match you to the right level</div>
+      </div>
+    </div>
+    <div class="section-label">10th class percentage</div>
+    <div class="field-wrap">
+      <div class="field-row"><span class="field-name">10th score</span><span class="field-val" id="tv">80%</span></div>
+      <input type="range" min="50" max="100" value="80" step="5" id="tpct" oninput="document.getElementById('tv').textContent=this.value+'%'">
+      <div class="range-ends"><span>50%</span><span>100%</span></div>
+    </div>
+    <div class="section-label">Inter / 12th expected percentage</div>
+    <div class="field-wrap">
+      <div class="field-row"><span class="field-name">Inter score</span><span class="field-val" id="iv">75%</span></div>
+      <input type="range" min="50" max="100" value="75" step="5" id="ipct" oninput="document.getElementById('iv').textContent=this.value+'%'">
+      <div class="range-ends"><span>50%</span><span>100%</span></div>
+    </div>
+    <div class="section-label">Entrance exam readiness</div>
+    <div class="card-grid cols2">
+      <div class="sel-card" data-g="exam" data-v="jee_adv" onclick="single(this,'exam')"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🏆</span><div class="card-lbl">JEE Advanced (IIT)</div></div>
+      <div class="sel-card" data-g="exam" data-v="jee_main" onclick="single(this,'exam')"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🎖️</span><div class="card-lbl">JEE Mains (NIT/IIIT)</div></div>
+      <div class="sel-card" data-g="exam" data-v="eamcet" onclick="single(this,'exam')"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">📋</span><div class="card-lbl">TSEAPCET / State CET</div></div>
+      <div class="sel-card" data-g="exam" data-v="mgmt" onclick="single(this,'exam')"><div class="check-mark"><i class="ti ti-check" style="font-size:9px"></i></div><span class="card-emoji">🏫</span><div class="card-lbl">Management quota</div></div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="back(5)"><i class="ti ti-arrow-left" style="font-size:13px;vertical-align:-1px" aria-hidden="true"></i> Back</button>
+      <button class="btn-next" onclick="compute()" style="background:#1D9E75;border-color:#0F6E56;color:white;">
+        <i class="ti ti-sparkles" style="font-size:13px;vertical-align:-1px" aria-hidden="true"></i> Reveal my branch matches
+      </button>
+    </div>
+  </div>
+
+  <div class="panel" id="s-result">
+    <div class="panel-header">
+      <div class="panel-icon icon-teal"><i class="ti ti-award" aria-hidden="true"></i></div>
+      <div>
+        <div class="panel-title">Your branch recommendations</div>
+        <div class="panel-sub">Ranked by how well they match your profile</div>
+      </div>
+    </div>
+
+    <div class="result-hero" id="top-hero"></div>
+
+    <div class="divider"></div>
+
+    <div class="all-branches-section">
+      <div class="section-label">All branch matches — click to explore</div>
+      <div id="branch-list"></div>
+    </div>
+
+    <div id="branch-detail"></div>
+
+    <div class="divider"></div>
+
+    <div class="rank-section" id="rank-section">
+      <div class="rank-title"><i class="ti ti-clipboard-list" style="font-size:16px;vertical-align:-2px;margin-right:6px" aria-hidden="true"></i>Get Telangana college recommendations</div>
+      <div class="rank-sub">Enter your TSEAMCET rank for the selected branch to see matching colleges in Telangana</div>
+      <div id="selected-branch-note" style="background:#E6F1FB;border:0.5px solid #B5D4F4;border-radius:8px;padding:8px 12px;font-size:12px;color:#0C447C;margin-bottom:12px;display:none;"></div>
+      <div class="rank-input-row">
+        <input type="number" id="rank-input" placeholder="e.g. 15000" min="1" max="200000">
+        <button class="btn-rank" onclick="showColleges()"><i class="ti ti-search" style="font-size:13px;vertical-align:-1px" aria-hidden="true"></i> Find colleges</button>
+      </div>
+    </div>
+
+    <div id="college-results"></div>
+
+    <button class="btn-restart" onclick="restart()"><i class="ti ti-refresh" style="font-size:13px;vertical-align:-1px" aria-hidden="true"></i> Start over — explore a different path</button>
+  </div>
+</div>
+
+<script>
+const DB = {
+  cse:{name:"Computer Science Engg (CSE)",emoji:"💻",jobs:"Software Engineer, Full Stack Dev, DevOps Engineer",industry:"IT, Product, Fintech, E-commerce",salary:"₹5–25 LPA (fresher)",global:"Very high — USA, UK, Canada, Australia",skills:[{n:"Coding demand",v:98,c:"sf-blue"},{n:"AI & cloud scope",v:92,c:"sf-teal"},{n:"Job availability",v:95,c:"sf-purple"}],sigs:{sub:["math","cs","phy_elec"],aoi:["coding","ai","cyber","data","gaming"],hob:["gaming_h","puzzles","tinkering"],job:["software","ai_job","hacker","startup"],cul:["startup","mnc"],sty:["desk","anywhere"]}},
+  ai_ds:{name:"AI & Data Science",emoji:"🤖",jobs:"ML Engineer, Data Scientist, AI Researcher",industry:"Tech Giants, Healthcare AI, Fintech",salary:"₹6–30 LPA (fresher)",global:"Very high — US, UK, Singapore",skills:[{n:"AI/ML scope",v:97,c:"sf-blue"},{n:"Math depth needed",v:90,c:"sf-teal"},{n:"Industry demand",v:93,c:"sf-purple"}],sigs:{sub:["math","cs","phy_comm"],aoi:["ai","coding","data"],hob:["puzzles","reading"],job:["ai_job","startup","research"],cul:["startup","mnc","research"],sty:["desk"]}},
+  it:{name:"Information Technology (IT)",emoji:"🖥️",jobs:"System Analyst, Cloud Engineer, IT Consultant",industry:"IT Services, BPO, Cloud, SaaS",salary:"₹4–18 LPA (fresher)",global:"High — USA, UK, UAE",skills:[{n:"Industry demand",v:88,c:"sf-blue"},{n:"Cloud/DevOps scope",v:85,c:"sf-teal"},{n:"Global placements",v:82,c:"sf-purple"}],sigs:{sub:["math","cs"],aoi:["coding","ai","cyber","data"],hob:["gaming_h","puzzles"],job:["software","startup"],cul:["startup","mnc"],sty:["desk","anywhere"]}},
+  cyber:{name:"Cyber Security",emoji:"🔐",jobs:"Security Analyst, Pen Tester, SOC Analyst",industry:"BFSI, Defence, IT Security, Government",salary:"₹5–20 LPA (fresher)",global:"High — US, UK, Israel, UAE",skills:[{n:"Security demand",v:90,c:"sf-blue"},{n:"Govt/defence scope",v:85,c:"sf-teal"},{n:"Global opportunity",v:80,c:"sf-purple"}],sigs:{sub:["cs","math"],aoi:["cyber","coding"],hob:["gaming_h","puzzles"],job:["hacker"],cul:["startup","govt"],sty:["desk","anywhere"]}},
+  ece:{name:"Electronics & Communication (ECE)",emoji:"📡",jobs:"VLSI Engineer, RF Engineer, Telecom Engineer",industry:"Semiconductors, ISRO, Telecom, Defence",salary:"₹4–18 LPA (fresher)",global:"High — Japan, South Korea, Germany",skills:[{n:"Core engineering depth",v:88,c:"sf-blue"},{n:"VLSI/embedded scope",v:85,c:"sf-teal"},{n:"Research opportunity",v:82,c:"sf-purple"}],sigs:{sub:["phy_elec","phy_comm","math"],aoi:["electronics","coding","space"],hob:["tinkering","puzzles"],job:["vlsi"],cul:["mnc","research","govt"],sty:["lab","desk"]}},
+  eee:{name:"Electrical & Electronics (EEE)",emoji:"⚡",jobs:"Power Engineer, Grid Analyst, PSU Engineer",industry:"Power Sector, NTPC, BHEL, Railways",salary:"₹4–15 LPA (fresher)",global:"Moderate — Middle East, Germany",skills:[{n:"Core industry scope",v:85,c:"sf-blue"},{n:"PSU/Govt access",v:90,c:"sf-teal"},{n:"Job stability",v:88,c:"sf-purple"}],sigs:{sub:["phy_elec","math"],aoi:["power","electronics"],hob:["tinkering","outdoors"],job:["power_eng"],cul:["govt","mnc"],sty:["field","lab"]}},
+  mech:{name:"Mechanical Engineering",emoji:"⚙️",jobs:"Design Engineer, CAD Specialist, Manufacturing Eng",industry:"Automotive, Aerospace, ISRO, DRDO",salary:"₹3.5–14 LPA (fresher)",global:"Moderate — Germany, Japan, UAE",skills:[{n:"Core engineering",v:86,c:"sf-blue"},{n:"Design/CAD scope",v:82,c:"sf-teal"},{n:"Industry breadth",v:88,c:"sf-purple"}],sigs:{sub:["phy_mech","math","draw"],aoi:["machines","robotics","space"],hob:["tinkering","outdoors"],job:["mech_job","space_job"],cul:["mnc","govt"],sty:["field","lab"]}},
+  robotics:{name:"Robotics & Mechatronics",emoji:"🦾",jobs:"Robotics Engineer, Automation Specialist, ROS Dev",industry:"Manufacturing 4.0, Defence, Healthcare Robotics",salary:"₹5–20 LPA (fresher)",global:"High — Japan, Germany, US, Korea",skills:[{n:"Future tech scope",v:92,c:"sf-blue"},{n:"Cross-domain skill",v:88,c:"sf-teal"},{n:"Global demand",v:85,c:"sf-purple"}],sigs:{sub:["phy_mech","phy_elec","cs"],aoi:["robotics","machines","electronics"],hob:["tinkering","gaming_h"],job:["robotics_job"],cul:["startup","mnc","research"],sty:["lab","field"]}},
+  civil:{name:"Civil Engineering",emoji:"🏗️",jobs:"Structural Engineer, Town Planner, Project Manager",industry:"Construction, Smart Cities, Infrastructure",salary:"₹3–12 LPA (fresher)",global:"Moderate — Middle East, UK, Australia",skills:[{n:"Infrastructure scope",v:84,c:"sf-blue"},{n:"Govt/PSU access",v:90,c:"sf-teal"},{n:"Long-term stability",v:85,c:"sf-purple"}],sigs:{sub:["math","phy_mech","draw","social"],aoi:["construction","environment"],hob:["outdoors","art_h"],job:["civil_job"],cul:["govt","mnc"],sty:["field"]}},
+  aerospace:{name:"Aerospace Engineering",emoji:"🚀",jobs:"Aerospace Engineer, ISRO Scientist, Defence R&D",industry:"ISRO, DRDO, HAL, Airlines, SpaceTech",salary:"₹5–18 LPA (fresher)",global:"High — US (NASA), ESA, UAE",skills:[{n:"Space/defence scope",v:90,c:"sf-blue"},{n:"Research depth",v:88,c:"sf-teal"},{n:"Prestige factor",v:95,c:"sf-purple"}],sigs:{sub:["math","phy_mech","phy_elec"],aoi:["space","machines","robotics"],hob:["reading","puzzles"],job:["space_job"],cul:["research","govt"],sty:["lab","field"]}},
+  chemical:{name:"Chemical Engineering",emoji:"⚗️",jobs:"Process Engineer, Petrochemical Eng, R&D Chemist",industry:"HPCL, BPCL, Pharma, Fertilizers",salary:"₹4–16 LPA (fresher)",global:"Moderate — Middle East, USA, Europe",skills:[{n:"Core industry depth",v:82,c:"sf-blue"},{n:"PSU/Govt access",v:85,c:"sf-teal"},{n:"Research scope",v:80,c:"sf-purple"}],sigs:{sub:["chem","math","bio"],aoi:["chemical","environment","health"],hob:["reading","outdoors"],job:["chem_job"],cul:["mnc","govt","research"],sty:["lab","field"]}},
+  biotech:{name:"Biotechnology / Biomedical",emoji:"🧬",jobs:"Biomedical Scientist, Clinical Engineer, Researcher",industry:"Pharma, Healthcare, AIIMS, Biotech Startups",salary:"₹3.5–12 LPA (fresher)",global:"Moderate — US, UK, Australia",skills:[{n:"Healthcare scope",v:82,c:"sf-blue"},{n:"Research depth",v:88,c:"sf-teal"},{n:"Future potential",v:85,c:"sf-purple"}],sigs:{sub:["bio","chem","math"],aoi:["health","chemical","environment"],hob:["reading","outdoors"],job:["bio_job","research"],cul:["research","mnc"],sty:["lab"]}},
+  environmental:{name:"Environmental Engineering",emoji:"🌱",jobs:"Env Consultant, Sustainability Analyst, EIA Expert",industry:"Green Energy, Water Treatment, Smart Cities",salary:"₹3–10 LPA (fresher)",global:"Moderate — Europe, Canada, Australia",skills:[{n:"Sustainability scope",v:80,c:"sf-blue"},{n:"Green economy growth",v:85,c:"sf-teal"},{n:"Global future",v:82,c:"sf-purple"}],sigs:{sub:["social","chem","geo","bio"],aoi:["environment","chemical","construction"],hob:["outdoors","reading"],job:["env_job"],cul:["research","govt"],sty:["field","lab"]}},
+  animation:{name:"Animation & Game Technology",emoji:"🎮",jobs:"Game Developer, 3D Artist, UX/UI Designer",industry:"Gaming, Film VFX, EdTech, Metaverse",salary:"₹3–15 LPA (fresher)",global:"High — US, Canada, Japan",skills:[{n:"Creative industry scope",v:85,c:"sf-blue"},{n:"Gaming boom demand",v:90,c:"sf-teal"},{n:"Global studio access",v:82,c:"sf-purple"}],sigs:{sub:["draw","cs","lang"],aoi:["gaming","coding"],hob:["gaming_h","art_h","social_m","music"],job:["game_job"],cul:["startup","mnc"],sty:["desk","anywhere"]}}
+};
+
+const TS_COLLEGES = {
+  cse:[
+    {n:"Osmania University",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 5,000 · Oldest & most reputed govt university"},
+    {n:"JNTU Hyderabad",loc:"Kukatpally, Hyderabad",t:"govt",details:"TSEAMCET rank < 8,000 · Strong alumni network"},
+    {n:"CBIT (Chaitanya Bharathi IT)",loc:"Gandipet, Hyderabad",t:"auto",details:"TSEAMCET rank < 15,000 · Top autonomous college"},
+    {n:"Vasavi College of Engineering",loc:"Ibrahimbagh, Hyderabad",t:"auto",details:"TSEAMCET rank < 18,000 · Excellent placement record"},
+    {n:"CVR College of Engineering",loc:"Hyderabad",t:"auto",details:"TSEAMCET rank < 25,000 · NAAC A+ accredited"},
+    {n:"VNR Vignana Jyothi",loc:"Bachupally, Hyderabad",t:"pvt",details:"TSEAMCET rank < 30,000 · Industry-oriented curriculum"},
+    {n:"KL University Hyderabad",loc:"Aziz Nagar, Hyderabad",t:"pvt",details:"Management quota / rank < 50,000"},
+    {n:"SR Engineering College",loc:"Warangal",t:"pvt",details:"TSEAMCET rank < 60,000 · Good for Warangal region students"},
+    {n:"Matrusri Engineering College",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 80,000"},
+    {n:"Ellenki College of Engineering",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 100,000"}
+  ],
+  ai_ds:[
+    {n:"IIIT Hyderabad",loc:"Gachibowli, Hyderabad",t:"govt",details:"TSEAMCET rank < 1,000 · Premier institute for AI/CS"},
+    {n:"JNTU Hyderabad",loc:"Kukatpally, Hyderabad",t:"govt",details:"TSEAMCET rank < 10,000 · New AI & DS dept"},
+    {n:"CBIT",loc:"Gandipet, Hyderabad",t:"auto",details:"TSEAMCET rank < 18,000 · AI labs, industry tie-ups"},
+    {n:"Vasavi College of Engineering",loc:"Ibrahimbagh, Hyderabad",t:"auto",details:"TSEAMCET rank < 22,000"},
+    {n:"VNR Vignana Jyothi",loc:"Bachupally, Hyderabad",t:"pvt",details:"TSEAMCET rank < 35,000 · Active AI research cell"},
+    {n:"Malla Reddy Engineering College",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 55,000"},
+    {n:"CMR Engineering College",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 70,000"},
+    {n:"Kakatiya Institute of Technology",loc:"Warangal",t:"pvt",details:"TSEAMCET rank < 90,000"}
+  ],
+  it:[
+    {n:"Osmania University",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 6,000"},
+    {n:"JNTU Hyderabad",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 12,000"},
+    {n:"CBIT",loc:"Hyderabad",t:"auto",details:"TSEAMCET rank < 20,000"},
+    {n:"Vasavi College of Engineering",loc:"Hyderabad",t:"auto",details:"TSEAMCET rank < 25,000"},
+    {n:"CVR College of Engineering",loc:"Hyderabad",t:"auto",details:"TSEAMCET rank < 30,000"},
+    {n:"KL University Hyderabad",loc:"Hyderabad",t:"pvt",details:"Rank < 50,000 or management quota"},
+    {n:"SR Engineering College",loc:"Warangal",t:"pvt",details:"TSEAMCET rank < 65,000"},
+    {n:"Sreenidhi Institute",loc:"Ghatkesar, Hyderabad",t:"pvt",details:"TSEAMCET rank < 80,000"}
+  ],
+  cyber:[
+    {n:"IIIT Hyderabad",loc:"Gachibowli, Hyderabad",t:"govt",details:"TSEAMCET rank < 2,000 · Dedicated cyber security lab"},
+    {n:"JNTU Hyderabad",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 15,000"},
+    {n:"CBIT",loc:"Hyderabad",t:"auto",details:"TSEAMCET rank < 22,000"},
+    {n:"Anurag University",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 45,000 · Cyber security specialisation"},
+    {n:"Malla Reddy University",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 60,000"},
+    {n:"Vardhaman College",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 80,000"}
+  ],
+  ece:[
+    {n:"Osmania University",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 4,000 · Strong ECE department"},
+    {n:"JNTU Hyderabad",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 7,000"},
+    {n:"CBIT",loc:"Hyderabad",t:"auto",details:"TSEAMCET rank < 14,000"},
+    {n:"Vasavi College",loc:"Hyderabad",t:"auto",details:"TSEAMCET rank < 18,000"},
+    {n:"Mahatma Gandhi IT (MGIT)",loc:"Hyderabad",t:"auto",details:"TSEAMCET rank < 22,000"},
+    {n:"CVR College of Engineering",loc:"Hyderabad",t:"auto",details:"TSEAMCET rank < 28,000"},
+    {n:"VNR Vignana Jyothi",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 38,000"},
+    {n:"SR Engineering College",loc:"Warangal",t:"pvt",details:"TSEAMCET rank < 55,000"},
+    {n:"Kakatiya Institute of Technology",loc:"Warangal",t:"pvt",details:"TSEAMCET rank < 70,000"},
+    {n:"Ellenki College",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 90,000"}
+  ],
+  eee:[
+    {n:"Osmania University",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 5,000"},
+    {n:"JNTU Hyderabad",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 9,000"},
+    {n:"CBIT",loc:"Hyderabad",t:"auto",details:"TSEAMCET rank < 18,000"},
+    {n:"Vasavi College",loc:"Hyderabad",t:"auto",details:"TSEAMCET rank < 22,000"},
+    {n:"Mahatma Gandhi IT",loc:"Hyderabad",t:"auto",details:"TSEAMCET rank < 28,000"},
+    {n:"KL University Hyderabad",loc:"Hyderabad",t:"pvt",details:"Rank < 55,000 or management quota"},
+    {n:"Anurag University",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 65,000"},
+    {n:"SR Engineering College",loc:"Warangal",t:"pvt",details:"TSEAMCET rank < 80,000"}
+  ],
+  mech:[
+    {n:"Osmania University",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 6,000 · Legacy mechanical department"},
+    {n:"JNTU Hyderabad",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 10,000"},
+    {n:"CBIT",loc:"Hyderabad",t:"auto",details:"TSEAMCET rank < 20,000"},
+    {n:"Vasavi College",loc:"Hyderabad",t:"auto",details:"TSEAMCET rank < 25,000"},
+    {n:"CVR College",loc:"Hyderabad",t:"auto",details:"TSEAMCET rank < 32,000"},
+    {n:"VNR Vignana Jyothi",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 42,000"},
+    {n:"SR Engineering College",loc:"Warangal",t:"pvt",details:"TSEAMCET rank < 58,000"},
+    {n:"Kakatiya IT",loc:"Warangal",t:"pvt",details:"TSEAMCET rank < 75,000"},
+    {n:"CMR College of Engineering",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 90,000"}
+  ],
+  robotics:[
+    {n:"IIIT Hyderabad",loc:"Gachibowli, Hyderabad",t:"govt",details:"TSEAMCET rank < 3,000 · Robotics & AI research centre"},
+    {n:"JNTU Hyderabad",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 15,000 · Mechatronics dept"},
+    {n:"Anurag University",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 40,000 · Robotics lab"},
+    {n:"Malla Reddy Engineering College",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 60,000"},
+    {n:"KL University Hyderabad",loc:"Hyderabad",t:"pvt",details:"Rank < 70,000 or management quota"}
+  ],
+  civil:[
+    {n:"Osmania University",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 5,000 · Top civil engineering dept in TS"},
+    {n:"JNTU Hyderabad",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 8,000"},
+    {n:"JNTUH College of Engineering Sultanpur",loc:"Medak, Telangana",t:"govt",details:"TSEAMCET rank < 12,000"},
+    {n:"Vasavi College",loc:"Hyderabad",t:"auto",details:"TSEAMCET rank < 22,000"},
+    {n:"MGIT",loc:"Hyderabad",t:"auto",details:"TSEAMCET rank < 28,000"},
+    {n:"VNR Vignana Jyothi",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 40,000"},
+    {n:"SR Engineering College",loc:"Warangal",t:"pvt",details:"TSEAMCET rank < 55,000"},
+    {n:"Kakatiya IT",loc:"Warangal",t:"pvt",details:"TSEAMCET rank < 70,000"},
+    {n:"CMR College",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 85,000"}
+  ],
+  aerospace:[
+    {n:"JNTU Hyderabad",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 12,000 · Aerospace elective available"},
+    {n:"Malla Reddy University",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 50,000 · Aerospace programme"},
+    {n:"KL University Hyderabad",loc:"Hyderabad",t:"pvt",details:"Rank < 60,000 or management quota"},
+    {n:"Anurag University",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 70,000"}
+  ],
+  chemical:[
+    {n:"Osmania University",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 6,000 · Legacy chemical dept"},
+    {n:"JNTU Hyderabad",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 10,000"},
+    {n:"GITAM University Hyderabad",loc:"Rudraram, Hyderabad",t:"pvt",details:"TSEAMCET rank < 40,000 · Chemical engineering"},
+    {n:"Anurag University",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 55,000"},
+    {n:"SR Engineering College",loc:"Warangal",t:"pvt",details:"TSEAMCET rank < 70,000"}
+  ],
+  biotech:[
+    {n:"Osmania University",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 8,000 · Biotech & biomedical"},
+    {n:"JNTU Hyderabad",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 12,000"},
+    {n:"GITAM University Hyderabad",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 40,000 · Life sciences campus"},
+    {n:"KL University Hyderabad",loc:"Hyderabad",t:"pvt",details:"Rank < 55,000 or management quota"},
+    {n:"Anurag University",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 65,000"},
+    {n:"CMR College",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 80,000"}
+  ],
+  environmental:[
+    {n:"Osmania University",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 10,000 · Environmental Engg dept"},
+    {n:"JNTU Hyderabad",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 15,000"},
+    {n:"GITAM University Hyderabad",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 45,000"},
+    {n:"Anurag University",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 60,000"}
+  ],
+  animation:[
+    {n:"IIIT Hyderabad",loc:"Gachibowli, Hyderabad",t:"govt",details:"TSEAMCET rank < 3,000 · Game design & animation lab"},
+    {n:"JNTU Hyderabad",loc:"Hyderabad",t:"govt",details:"TSEAMCET rank < 18,000 · Animation & multimedia"},
+    {n:"KL University Hyderabad",loc:"Hyderabad",t:"pvt",details:"Rank < 50,000 or management quota · Game dev lab"},
+    {n:"Malla Reddy University",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 60,000"},
+    {n:"Anurag University",loc:"Hyderabad",t:"pvt",details:"TSEAMCET rank < 70,000"}
+  ]
+};
+
+const RANK_CUTOFFS = {
+  cse:[3000,6000,14000,18000,25000,32000,50000,60000,80000,100000],
+  ai_ds:[1000,10000,18000,22000,35000,55000,70000,90000],
+  it:[6000,12000,20000,25000,30000,50000,65000,80000],
+  cyber:[2000,15000,22000,45000,60000,80000],
+  ece:[4000,7000,14000,18000,22000,28000,38000,55000,70000,90000],
+  eee:[5000,9000,18000,22000,28000,55000,65000,80000],
+  mech:[6000,10000,20000,25000,32000,42000,58000,75000,90000],
+  robotics:[3000,15000,40000,60000,70000],
+  civil:[5000,8000,12000,22000,28000,40000,55000,70000,85000],
+  aerospace:[12000,50000,60000,70000],
+  chemical:[6000,10000,40000,55000,70000],
+  biotech:[8000,12000,40000,55000,65000,80000],
+  environmental:[10000,15000,45000,60000],
+  animation:[3000,18000,50000,60000,70000]
+};
+
+let sel={}, cur=1, branchScores=[], activeBranch='cse';
+
+function tog(el){el.classList.toggle('selected');}
+function single(el,g){
+  document.querySelectorAll(`[data-g="${g}"]`).forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function getG(g){return [...document.querySelectorAll(`[data-g="${g}"].selected`)].map(e=>e.dataset.v);}
+function rng(id,v){const m=['Average','Medium','Very strong'];document.getElementById(id).textContent=m[v-1];}
+
+function showErr(m){
+  const e=document.getElementById('err');
+  e.textContent='⚠ '+m; e.style.display='block';
+  setTimeout(()=>e.style.display='none',3000);
+}
+
+function updateProg(s){
+  const p=Math.round((s/5)*100);
+  document.getElementById('prog').style.width=p+'%';
+  document.getElementById('step-lbl').textContent='Step '+s+' of 5';
+  document.getElementById('step-pct').textContent=p+'%';
+  document.querySelectorAll('.dot').forEach((d,i)=>{
+    d.className='dot'+(i+1<s?' done':i+1===s?' active':'');
+  });
+}
+
+function initDots(){
+  const c=document.getElementById('dots');
+  c.innerHTML='';
+  for(let i=1;i<=5;i++){const d=document.createElement('div');d.className='dot'+(i===1?' active':'');c.appendChild(d);}
+}
+
+function showPanel(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function go(from){
+  if(from===1){
+    const s=[...getG('mpc'),...getG('tenth')];
+    if(!s.length){showErr('Select at least one favourite subject.');return;}
+    sel.subjects=s;
+  }
+  if(from===2){
+    const a=getG('aoi');
+    if(!a.length){showErr('Pick at least one area of interest.');return;}
+    sel.aoi=a;
+  }
+  if(from===3){
+    sel.hobbies=getG('hobby');
+    sel.logic=parseInt(document.getElementById('la').value);
+    sel.creative=parseInt(document.getElementById('ca').value);
+    sel.hands=parseInt(document.getElementById('ha').value);
+    sel.research=parseInt(document.getElementById('ra').value);
+  }
+  if(from===4){
+    const j=document.getElementById('djob').value;
+    if(!j){showErr('Please select your dream job domain.');return;}
+    sel.job=j; sel.culture=getG('culture')[0]||''; sel.style=getG('style')[0]||'';
+  }
+  cur=from+1;
+  showPanel('s'+cur);
+  updateProg(cur);
+  window.scrollTo(0,0);
+}
+
+function back(from){
+  cur=from-1;
+  showPanel('s'+cur);
+  updateProg(cur);
+  window.scrollTo(0,0);
+}
+
+function scoreLabel(pct){
+  if(pct>=70) return {lbl:'Strong match',cls:'badge-strong'};
+  if(pct>=45) return {lbl:'Moderate match',cls:'badge-moderate'};
+  return {lbl:'Weak match',cls:'badge-weak'};
+}
+
+function barClass(pct){
+  if(pct>=70) return 'bar-strong';
+  if(pct>=45) return 'bar-moderate';
+  return 'bar-weak';
+}
+
+function compute(){
+  sel.tenth=parseInt(document.getElementById('tpct').value);
+  sel.inter=parseInt(document.getElementById('ipct').value);
+  sel.exam=getG('exam')[0]||'eamcet';
+
+  const scores={};
+  Object.keys(DB).forEach(k=>{
+    let sc=0;
+    const sig=DB[k].sigs;
+    (sig.sub||[]).forEach(s=>{ if((sel.subjects||[]).includes(s)) sc+=3; });
+    (sig.aoi||[]).forEach(a=>{ if((sel.aoi||[]).includes(a)) sc+=3; });
+    (sig.hob||[]).forEach(h=>{ if((sel.hobbies||[]).includes(h)) sc+=2; });
+    if((sig.job||[]).includes(sel.job)) sc+=5;
+    if((sig.cul||[]).includes(sel.culture)) sc+=2;
+    if((sig.sty||[]).includes(sel.style)) sc+=2;
+    if(['cse','ai_ds','it'].includes(k)&&sel.logic===3) sc+=2;
+    if(['mech','civil'].includes(k)&&sel.hands===3) sc+=2;
+    if(['aerospace','biotech','chemical'].includes(k)&&sel.research===3) sc+=2;
+    if(k==='animation'&&sel.creative===3) sc+=3;
+    scores[k]=sc;
+  });
+
+  const max=32;
+  branchScores=Object.entries(scores)
+    .map(([k,v])=>({key:k,score:v,pct:Math.min(99,Math.round((v/max)*100))}))
+    .sort((a,b)=>b.pct-a.pct);
+
+  activeBranch=branchScores[0].key;
+
+  renderResults();
+  showPanel('s-result');
+  document.querySelector('.progress-wrap').style.display='none';
+  window.scrollTo(0,0);
+}
+
+function renderResults(){
+  const top=branchScores[0];
+  const b=DB[top.key];
+  const sl=scoreLabel(top.pct);
+
+  document.getElementById('top-hero').innerHTML=`
+    <div class="result-emoji">${b.emoji}</div>
+    <div class="result-badge ${sl.cls}">${sl.lbl} · ${top.pct}%</div>
+    <div class="result-branch">${b.name}</div>
+    <div class="match-pct">Top match — <strong>${top.pct}% profile alignment</strong></div>
+  `;
+
+  const bl=document.getElementById('branch-list');
+  bl.innerHTML='';
+  branchScores.forEach(br=>{
+    const bdata=DB[br.key];
+    const sl2=scoreLabel(br.pct);
+    const bc=barClass(br.pct);
+    const div=document.createElement('div');
+    div.className='branch-match-card'+(br.key===activeBranch?' selected-branch':'');
+    div.onclick=()=>selectBranch(br.key);
+    div.innerHTML=`
+      <div class="branch-card-left">
+        <div class="branch-card-name">${bdata.emoji} ${bdata.name}</div>
+        <div class="branch-card-meta"><span class="result-badge ${sl2.cls}" style="padding:2px 8px;font-size:9px">${sl2.lbl}</span></div>
+      </div>
+      <div class="branch-bar-wrap">
+        <div class="branch-bar-track"><div class="branch-bar-fill ${bc}" style="width:0%" data-w="${br.pct}"></div></div>
+        <div class="bar-pct">${br.pct}%</div>
+      </div>
+    `;
+    bl.appendChild(div);
+  });
+
+  renderBranchDetail(activeBranch);
+  updateSelectedNote();
+
+  setTimeout(()=>{
+    document.querySelectorAll('.branch-bar-fill').forEach(el=>{
+      el.style.width=el.dataset.w+'%';
+    });
+  },200);
+}
+
+function selectBranch(key){
+  activeBranch=key;
+  document.querySelectorAll('.branch-match-card').forEach(c=>c.classList.remove('selected-branch'));
+  const cards=document.querySelectorAll('.branch-match-card');
+  const idx=branchScores.findIndex(b=>b.key===key);
+  if(idx>=0) cards[idx].classList.add('selected-branch');
+  renderBranchDetail(key);
+  updateSelectedNote();
+  document.getElementById('college-results').innerHTML='';
+  document.getElementById('rank-input').value='';
+}
+
+function updateSelectedNote(){
+  const note=document.getElementById('selected-branch-note');
+  const b=DB[activeBranch];
+  note.style.display='block';
+  note.innerHTML=`<i class="ti ti-info-circle" style="font-size:13px;vertical-align:-1px;margin-right:4px" aria-hidden="true"></i>Showing colleges for: <strong>${b.emoji} ${b.name}</strong>. Click a different branch above to change.`;
+}
+
+function renderBranchDetail(key){
+  const b=DB[key];
+  const sc=branchScores.find(x=>x.key===key);
+  const sl=scoreLabel(sc.pct);
+  const el=document.getElementById('branch-detail');
+  el.innerHTML=`
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1rem;">
+      <div style="font-size:15px;font-weight:500;margin-bottom:12px;">${b.emoji} ${b.name} <span class="result-badge ${sl.cls}" style="margin-left:6px">${sl.lbl}</span></div>
+      <div class="info-grid">
+        <div class="info-card"><div class="info-card-label">Top job roles</div><div class="info-card-value">${b.jobs}</div></div>
+        <div class="info-card"><div class="info-card-label">Key industries</div><div class="info-card-value">${b.industry}</div></div>
+        <div class="info-card"><div class="info-card-label">Starting salary</div><div class="info-card-value">${b.salary}</div></div>
+        <div class="info-card"><div class="info-card-label">Global scope</div><div class="info-card-value">${b.global}</div></div>
+      </div>
+      <div class="skills-section">
+        ${b.skills.map(s=>`
+          <div class="skill-item">
+            <div class="skill-top"><span>${s.n}</span><span>${s.v}%</span></div>
+            <div class="skill-track"><div class="skill-fill ${s.c}" style="width:${s.v}%"></div></div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function showColleges(){
+  const rankVal=document.getElementById('rank-input').value.trim();
+  const rank=parseInt(rankVal);
+  const cr=document.getElementById('college-results');
+
+  if(!rankVal||isNaN(rank)||rank<1){
+    cr.innerHTML='<div class="no-college"><i class="ti ti-alert-circle" style="font-size:16px;vertical-align:-2px;margin-right:6px" aria-hidden="true"></i>Please enter a valid TSEAMCET rank.</div>';
+    return;
+  }
+
+  const bname=DB[activeBranch].name;
+  const allColleges=TS_COLLEGES[activeBranch]||[];
+  const cutoffs=RANK_CUTOFFS[activeBranch]||[];
+
+  const eligible=allColleges.filter((_,i)=>rank<=cutoffs[i]);
+  const borderline=allColleges.filter((_,i)=>rank>cutoffs[i]&&rank<=(cutoffs[i]*1.3));
+
+  let html=`<div style="margin-bottom:12px">`;
+  html+=`<div class="section-label">Colleges for ${DB[activeBranch].emoji} ${bname} — TSEAMCET rank ${rank.toLocaleString()}</div>`;
+
+  if(eligible.length===0&&borderline.length===0){
+    html+=`<div class="no-college">
+      <i class="ti ti-mood-sad" style="font-size:20px;display:block;margin-bottom:6px" aria-hidden="true"></i>
+      No colleges found in our database for rank ${rank.toLocaleString()} in this branch.<br>
+      <span style="font-size:11px;margin-top:6px;display:block">Consider management quota, a different branch, or check the official TSEAMCET counselling portal for updated cutoffs.</span>
+    </div>`;
+  } else {
+    if(eligible.length>0){
+      html+=`<div style="font-size:12px;color:var(--color-text-success);font-weight:500;margin-bottom:8px;"><i class="ti ti-circle-check" style="font-size:13px;vertical-align:-1px;margin-right:4px" aria-hidden="true"></i>${eligible.length} college${eligible.length>1?'s':''} likely within your rank range</div>`;
+      eligible.forEach((c,i)=>{
+        const tmap={govt:'Govt',auto:'Autonomous',pvt:'Private'};
+        const tcls={govt:'t-govt',auto:'t-auto',pvt:'t-pvt'};
+        html+=`<div class="college-item">
+          <div class="college-rank-num">#${i+1}</div>
+          <div class="college-info">
+            <div class="college-name">${c.n}</div>
+            <div class="college-loc"><i class="ti ti-map-pin" style="font-size:11px;vertical-align:-1px;margin-right:2px" aria-hidden="true"></i>${c.loc}</div>
+            <div class="college-details">${c.details}</div>
+          </div>
+          <span class="tier-badge ${tcls[c.t]}">${tmap[c.t]}</span>
+        </div>`;
+      });
+    }
+    if(borderline.length>0){
+      html+=`<div style="font-size:12px;color:#854F0B;font-weight:500;margin:12px 0 8px;"><i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-1px;margin-right:4px" aria-hidden="true"></i>${borderline.length} borderline — may be possible via spot/extended counselling</div>`;
+      borderline.forEach((c,i)=>{
+        const tmap={govt:'Govt',auto:'Autonomous',pvt:'Private'};
+        const tcls={govt:'t-govt',auto:'t-auto',pvt:'t-pvt'};
+        html+=`<div class="college-item" style="opacity:0.75;border-style:dashed;">
+          <div class="college-rank-num" style="color:#888">?</div>
+          <div class="college-info">
+            <div class="college-name">${c.n}</div>
+            <div class="college-loc"><i class="ti ti-map-pin" style="font-size:11px;vertical-align:-1px;margin-right:2px" aria-hidden="true"></i>${c.loc}</div>
+            <div class="college-details">${c.details}</div>
+          </div>
+          <span class="tier-badge ${tcls[c.t]}">${tmap[c.t]}</span>
+        </div>`;
+      });
+    }
+  }
+  html+=`<div class="rank-result-note"><i class="ti ti-info-circle" style="font-size:13px;vertical-align:-1px;margin-right:4px" aria-hidden="true"></i>Cutoffs shown are approximate based on recent TSEAMCET trends. Always verify on the official <strong>tseamcet.nic.in</strong> portal. Cutoffs vary each year by category (OC/BC/SC/ST).</div>`;
+  html+=`</div>`;
+  cr.innerHTML=html;
+  document.getElementById('college-results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function restart(){
+  document.querySelectorAll('.sel-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('djob').value='';
+  ['la','ca','ha','ra'].forEach(id=>document.getElementById(id).value=2);
+  ['lv','cv','hv','rv'].forEach(id=>document.getElementById(id).textContent='Medium');
+  document.getElementById('tpct').value=80; document.getElementById('tv').textContent='80%';
+  document.getElementById('ipct').value=75; document.getElementById('iv').textContent='75%';
+  document.getElementById('rank-input').value='';
+  document.getElementById('college-results').innerHTML='';
+  document.querySelector('.progress-wrap').style.display='block';
+  cur=1; showPanel('s1'); updateProg(1); window.scrollTo(0,0);
+}
+
+initDots();
+updateProg(1);
+</script>

@@ -1,0 +1,182 @@
+<!-- Save this file as: index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>B.Tech Counselling Portal</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body{
+      height:100vh;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:
+        linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65)),
+        url('DeepMappingGuide.png') center/cover no-repeat;
+    }
+
+    .container{
+      text-align:center;
+      width:90%;
+      max-width:900px;
+      padding:60px 40px;
+      border-radius:30px;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.2);
+      box-shadow:0 8px 40px rgba(0,0,0,0.4);
+      animation: fadeIn 1.2s ease;
+    }
+
+    h1{
+      color:white;
+      font-size:3.2rem;
+      margin-bottom:15px;
+      font-weight:700;
+      letter-spacing:1px;
+      text-shadow:0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    p{
+      color:#f2f2f2;
+      font-size:1.1rem;
+      margin-bottom:50px;
+      line-height:1.7;
+    }
+
+    .button-container{
+      display:flex;
+      gap:30px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    .card-btn{
+      width:280px;
+      padding:28px 20px;
+      border-radius:24px;
+      text-decoration:none;
+      color:white;
+      transition:0.4s ease;
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(6px);
+    }
+
+    .card-btn::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+      opacity:0;
+      transition:0.4s;
+    }
+
+    .card-btn:hover::before{
+      opacity:1;
+    }
+
+    .card-btn:hover{
+      transform:translateY(-10px) scale(1.03);
+      box-shadow:0 12px 30px rgba(0,0,0,0.35);
+    }
+
+    .normal{
+      background:linear-gradient(135deg, #0066ff, #00b7ff);
+    }
+
+    .ai{
+      background:linear-gradient(135deg, #7b2cff, #ff3cac);
+    }
+
+    .icon{
+      font-size:3rem;
+      margin-bottom:18px;
+    }
+
+    .title{
+      font-size:1.5rem;
+      font-weight:700;
+      margin-bottom:10px;
+    }
+
+    .desc{
+      font-size:0.95rem;
+      opacity:0.95;
+      line-height:1.6;
+    }
+
+    @keyframes fadeIn{
+      from{
+        opacity:0;
+        transform:translateY(20px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    @media(max-width:768px){
+      h1{
+        font-size:2.2rem;
+      }
+
+      .container{
+        padding:40px 20px;
+      }
+
+      .card-btn{
+        width:100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>🎓 B.Tech Counselling Portal</h1>
+
+    <p>
+      Explore engineering colleges, branches, ranks, placements,
+      and AI-powered counselling support through an intelligent and
+      modern guidance platform.
+    </p>
+
+    <div class="button-container">
+
+      <a href="btech_counsellor_light.html" class="card-btn normal">
+        <div class="icon">📘</div>
+        <div class="title">B.Tech Counsellor</div>
+        <div class="desc">
+          Traditional counselling system with college and branch guidance.
+        </div>
+      </a>
+
+      <a href="BTechCounsellor.html" class="card-btn ai">
+        <div class="icon">🤖</div>
+        <div class="title">AI B.Tech Counsellor</div>
+        <div class="desc">
+          AI-powered intelligent counselling with personalized recommendations.
+        </div>
+      </a>
+
+    </div>
+
+  </div>
+
+</body>
+</html>

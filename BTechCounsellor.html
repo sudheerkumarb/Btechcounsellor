@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>AI-Powered B.Tech Branch Counsellor</title>
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+:root{
+
+  --glass:
+    rgba(255,255,255,0.12);
+
+  --glass2:
+    rgba(255,255,255,0.08);
+
+  --border:
+    rgba(255,255,255,0.18);
+
+  --text:
+    #f8fafc;
+
+  --sub:
+    #cbd5e1;
+
+  --card:
+    rgba(255,255,255,0.08);
+
+  --green:
+    #22c55e;
+
+  --blue:
+    #3b82f6;
+
+  --orange:
+    #f59e0b;
+
+  --red:
+    #ef4444;
+
+  --purple:
+    #8b5cf6;
+}
+
+body{
+
+  min-height:100vh;
+
+  font-family:
+    Inter,
+    system-ui,
+    sans-serif;
+
+  color:var(--text);
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(59,130,246,0.35),
+      transparent 25%
+    ),
+
+    radial-gradient(
+      circle at bottom right,
+      rgba(139,92,246,0.35),
+      transparent 25%
+    ),
+
+    linear-gradient(
+      135deg,
+      #020617,
+      #0f172a,
+      #111827,
+      #1e293b
+    );
+
+  padding:40px 20px;
+}
+
+/* =========================================================
+   APP
+========================================================= */
+
+#app{
+
+  max-width:1300px;
+  margin:auto;
+
+  backdrop-filter:blur(18px);
+
+  background:rgba(255,255,255,0.08);
+
+  border:1px solid rgba(255,255,255,0.15);
+
+  border-radius:30px;
+
+  padding:40px;
+
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.45);
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+
+  text-align:center;
+  margin-bottom:35px;
+}
+
+.badge{
+
+  display:inline-block;
+
+  padding:8px 16px;
+
+  border-radius:999px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(59,130,246,0.2),
+      rgba(139,92,246,0.2)
+    );
+
+  border:1px solid rgba(255,255,255,0.15);
+
+  font-size:12px;
+
+  letter-spacing:1.4px;
+
+  margin-bottom:20px;
+}
+
+.hero h1{
+
+  font-size:48px;
+  line-height:1.1;
+
+  margin-bottom:14px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #fff,
+      #93c5fd,
+      #c4b5fd
+    );
+
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.hero p{
+
+  color:var(--sub);
+
+  max-width:900px;
+
+  margin:auto;
+
+  line-height:1.7;
+
+  font-size:17px;
+}
+
+/* =========================================================
+   WARNING
+========================================================= */
+
+.warning{
+
+  margin-top:30px;
+
+  padding:22px;
+
+  border-radius:20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(245,158,11,0.15),
+      rgba(239,68,68,0.12)
+    );
+
+  border:
+    1px solid rgba(245,158,11,0.35);
+}
+
+.warning h3{
+
+  color:#fde68a;
+
+  margin-bottom:10px;
+
+  font-size:18px;
+}
+
+.warning p{
+
+  color:#fde68a;
+
+  line-height:1.8;
+
+  font-size:14px;
+}
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.grid{
+
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:25px;
+
+  margin-top:40px;
+}
+
+.card{
+
+  background:var(--card);
+
+  border:1px solid var(--border);
+
+  border-radius:24px;
+
+  padding:24px;
+
+  backdrop-filter:blur(12px);
+}
+
+.card h2{
+
+  margin-bottom:20px;
+
+  font-size:22px;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(auto-fit,minmax(160px,1fr));
+
+  gap:14px;
+}
+
+.choice{
+
+  padding:16px;
+
+  border-radius:18px;
+
+  border:1px solid rgba(255,255,255,0.12);
+
+  background:rgba(255,255,255,0.06);
+
+  cursor:pointer;
+
+  transition:0.25s;
+
+  text-align:center;
+}
+
+.choice:hover{
+
+  transform:translateY(-4px);
+
+  border-color:#60a5fa;
+
+  box-shadow:
+    0 12px 24px rgba(59,130,246,0.25);
+}
+
+.choice.active{
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(59,130,246,0.35),
+      rgba(139,92,246,0.35)
+    );
+
+  border-color:#93c5fd;
+}
+
+.choice span{
+
+  display:block;
+
+  font-size:32px;
+
+  margin-bottom:10px;
+}
+
+.choice small{
+
+  color:#e2e8f0;
+
+  line-height:1.5;
+}
+
+/* =========================================================
+   GENERATE BUTTON
+========================================================= */
+
+.generate{
+
+  margin-top:35px;
+
+  width:100%;
+
+  padding:18px;
+
+  border:none;
+
+  border-radius:20px;
+
+  font-size:18px;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+  color:white;
+
+  background:
+    linear-gradient(
+      90deg,
+      #2563eb,
+      #7c3aed
+    );
+
+  transition:0.25s;
+}
+
+.generate:hover{
+
+  transform:translateY(-3px);
+
+  box-shadow:
+    0 20px 40px rgba(59,130,246,0.35);
+}
+
+/* =========================================================
+   RESULTS
+========================================================= */
+
+.results{
+
+  margin-top:40px;
+
+  display:none;
+}
+
+.top-branch{
+
+  padding:30px;
+
+  border-radius:28px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(34,197,94,0.18),
+      rgba(59,130,246,0.18)
+    );
+
+  border:1px solid rgba(255,255,255,0.15);
+
+  margin-bottom:30px;
+}
+
+.top-branch h2{
+
+  font-size:34px;
+
+  margin-bottom:10px;
+}
+
+.top-branch p{
+
+  color:#dbeafe;
+
+  line-height:1.8;
+}
+
+.score{
+
+  margin-top:20px;
+
+  height:14px;
+
+  background:rgba(255,255,255,0.08);
+
+  border-radius:999px;
+
+  overflow:hidden;
+}
+
+.score-fill{
+
+  height:100%;
+
+  width:92%;
+
+  border-radius:999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #22c55e,
+      #3b82f6
+    );
+}
+
+/* =========================================================
+   EXPLAIN
+========================================================= */
+
+.explain{
+
+  margin-top:28px;
+
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:20px;
+}
+
+.exp-card{
+
+  background:rgba(255,255,255,0.06);
+
+  border:1px solid rgba(255,255,255,0.12);
+
+  border-radius:20px;
+
+  padding:20px;
+}
+
+.exp-card h3{
+
+  margin-bottom:14px;
+
+  color:#93c5fd;
+}
+
+.exp-card ul{
+
+  padding-left:20px;
+}
+
+.exp-card li{
+
+  margin-bottom:10px;
+
+  color:#e2e8f0;
+
+  line-height:1.6;
+}
+
+/* =========================================================
+   FEEDBACK
+========================================================= */
+
+.feedback{
+
+  margin-top:40px;
+
+  padding:28px;
+
+  border-radius:24px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,0.08),
+      rgba(255,255,255,0.04)
+    );
+
+  border:1px solid rgba(255,255,255,0.12);
+}
+
+.feedback h3{
+
+  margin-bottom:12px;
+}
+
+.feedback p{
+
+  color:#cbd5e1;
+
+  margin-bottom:20px;
+}
+
+.feedback-buttons{
+
+  display:flex;
+
+  gap:14px;
+
+  margin-bottom:20px;
+}
+
+.fb{
+
+  flex:1;
+
+  padding:14px;
+
+  border:none;
+
+  border-radius:16px;
+
+  cursor:pointer;
+
+  font-size:16px;
+
+  font-weight:700;
+
+  transition:0.25s;
+}
+
+.good{
+
+  background:
+    linear-gradient(
+      90deg,
+      #16a34a,
+      #22c55e
+    );
+
+  color:white;
+}
+
+.bad{
+
+  background:
+    linear-gradient(
+      90deg,
+      #dc2626,
+      #ef4444
+    );
+
+  color:white;
+}
+
+textarea{
+
+  width:100%;
+
+  min-height:120px;
+
+  resize:vertical;
+
+  border:none;
+
+  border-radius:18px;
+
+  padding:18px;
+
+  background:rgba(255,255,255,0.08);
+
+  color:white;
+
+  font-size:15px;
+
+  outline:none;
+}
+
+/* =========================================================
+   GRAPH
+========================================================= */
+
+.graph{
+
+  margin-top:40px;
+
+  padding:25px;
+
+  border-radius:24px;
+
+  background:rgba(255,255,255,0.05);
+
+  border:1px solid rgba(255,255,255,0.12);
+}
+
+.flow{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  flex-wrap:wrap;
+
+  gap:20px;
+
+  margin-top:20px;
+}
+
+.node{
+
+  flex:1;
+
+  min-width:180px;
+
+  padding:20px;
+
+  border-radius:20px;
+
+  text-align:center;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(59,130,246,0.2),
+      rgba(139,92,246,0.2)
+    );
+
+  border:1px solid rgba(255,255,255,0.15);
+}
+
+.arrow{
+
+  font-size:34px;
+
+  color:#93c5fd;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:900px){
+
+  .grid,
+  .explain{
+
+    grid-template-columns:1fr;
+  }
+
+  .hero h1{
+
+    font-size:34px;
+  }
+
+  #app{
+
+    padding:22px;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+  <div class="hero">
+
+    <div class="badge">
+      AI-POWERED ENGINEERING COUNSELLING SYSTEM
+    </div>
+
+    <h1>
+      B.Tech Branch Intelligence Platform
+    </h1>
+
+    <p>
+      Advanced experimental counselling system that maps
+      favourite subjects, aptitude, interests,
+      personality traits, and dream jobs
+      to engineering branches in India.
+    </p>
+
+    <div class="warning">
+
+      <h3>
+        ⚠ Experimental Recommendation System
+      </h3>
+
+      <p>
+        This counselling tool is currently in an early-stage
+        experimental phase.
+
+        Recommendations may contain inaccuracies,
+        incomplete mappings, or evolving industry assumptions.
+
+        Do NOT make final counselling decisions based only
+        on this tool.
+
+        Please consult official counselling experts,
+        professors, seniors, mentors, and placement statistics
+        before selecting a branch.
+
+        This platform will improve continuously
+        using future feedback and AI-assisted refinement.
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="grid">
+
+    <!-- SUBJECTS -->
+
+    <div class="card">
+
+      <h2>
+        📚 Favourite Subjects
+      </h2>
+
+      <div class="btn-grid">
+
+        <div class="choice active">
+          <span>📐</span>
+          <small>Mathematics</small>
+        </div>
+
+        <div class="choice active">
+          <span>💻</span>
+          <small>Computer Science</small>
+        </div>
+
+        <div class="choice">
+          <span>⚡</span>
+          <small>Physics Electricity</small>
+        </div>
+
+        <div class="choice">
+          <span>⚙️</span>
+          <small>Physics Mechanics</small>
+        </div>
+
+        <div class="choice">
+          <span>🧪</span>
+          <small>Chemistry</small>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- INTERESTS -->
+
+    <div class="card">
+
+      <h2>
+        🚀 Areas of Interest
+      </h2>
+
+      <div class="btn-grid">
+
+        <div class="choice active">
+          <span>🤖</span>
+          <small>Artificial Intelligence</small>
+        </div>
+
+        <div class="choice active">
+          <span>👨‍💻</span>
+          <small>Coding & Algorithms</small>
+        </div>
+
+        <div class="choice">
+          <span>🔐</span>
+          <small>Cyber Security</small>
+        </div>
+
+        <div class="choice">
+          <span>📈</span>
+          <small>Data Analytics</small>
+        </div>
+
+        <div class="choice">
+          <span>🎮</span>
+          <small>Gaming</small>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <button class="generate" onclick="showResults()">
+
+    <i class="ti ti-sparkles"></i>
+
+    Generate AI Branch Prediction
+
+  </button>
+
+  <!-- RESULTS -->
+
+  <div class="results" id="results">
+
+    <div class="top-branch">
+
+      <h2>
+        🤖 AI & Data Science
+      </h2>
+
+      <p>
+        Your profile strongly aligns with AI & Data Science
+        because of your strong mathematical orientation,
+        logical reasoning ability,
+        coding interest,
+        and AI-focused career goals.
+      </p>
+
+      <div class="score">
+        <div class="score-fill"></div>
+      </div>
+
+      <p style="margin-top:10px;">
+        Recommendation Confidence:
+        <strong>Very High (92%)</strong>
+      </p>
+
+    </div>
+
+    <!-- EXPLAINABILITY -->
+
+    <div class="explain">
+
+      <div class="exp-card">
+
+        <h3>
+          ✅ Why AI & Data Science matched you
+        </h3>
+
+        <ul>
+
+          <li>
+            Strong Mathematics foundation
+          </li>
+
+          <li>
+            High AI & coding interest
+          </li>
+
+          <li>
+            Strong logical aptitude
+          </li>
+
+          <li>
+            Interest in analytical problem solving
+          </li>
+
+          <li>
+            Dream job aligns with ML Engineering
+          </li>
+
+        </ul>
+
+      </div>
+
+      <div class="exp-card">
+
+        <h3>
+          ❌ Why Civil Engineering ranked lower
+        </h3>
+
+        <ul>
+
+          <li>
+            Low infrastructure/construction interest
+          </li>
+
+          <li>
+            Strong software orientation
+          </li>
+
+          <li>
+            Preferred desk/research work
+          </li>
+
+          <li>
+            Limited field-work preference
+          </li>
+
+          <li>
+            AI interests dominate mechanical/civil traits
+          </li>
+
+        </ul>
+
+      </div>
+
+    </div>
+
+    <!-- KNOWLEDGE GRAPH -->
+
+    <div class="graph">
+
+      <h2>
+        🧠 Recommendation Knowledge Flow
+      </h2>
+
+      <div class="flow">
+
+        <div class="node">
+          📐 Mathematics
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="node">
+          🤖 AI Interest
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="node">
+          🧠 Logical Aptitude
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="node">
+          💻 AI & DS
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="node">
+          🚀 ML Engineer
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- CHART -->
+
+    <div class="graph">
+
+      <h2>
+        📊 Branch Match Comparison
+      </h2>
+
+      <canvas id="chart"></canvas>
+
+    </div>
+
+    <!-- FEEDBACK -->
+
+    <div class="feedback">
+
+      <h3>
+        🧠 Help Improve This System
+      </h3>
+
+      <p>
+        Your feedback helps improve future recommendations
+        and mapping accuracy.
+      </p>
+
+      <div class="feedback-buttons">
+
+        <button class="fb good">
+          👍 Accurate Recommendation
+        </button>
+
+        <button class="fb bad">
+          👎 Needs Correction
+        </button>
+
+      </div>
+
+      <textarea
+      placeholder="Tell us what felt incorrect, missing, or confusing..."></textarea>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+function showResults(){
+
+  document
+    .getElementById("results")
+    .style.display="block";
+
+  window.scrollTo({
+
+    top:
+      document
+      .getElementById("results")
+      .offsetTop - 40,
+
+    behavior:"smooth"
+  });
+
+  loadChart();
+}
+
+function loadChart(){
+
+  const ctx =
+    document
+    .getElementById("chart");
+
+  new Chart(ctx, {
+
+    type:"bar",
+
+    data:{
+
+      labels:[
+        "AI & DS",
+        "CSE",
+        "Cyber",
+        "ECE",
+        "Mechanical",
+        "Civil"
+      ],
+
+      datasets:[{
+
+        label:"Branch Match %",
+
+        data:[92,88,80,70,52,31],
+
+        borderRadius:12
+      }]
+    },
+
+    options:{
+
+      responsive:true,
+
+      plugins:{
+
+        legend:{
+          labels:{
+            color:"#fff"
+          }
+        }
+      },
+
+      scales:{
+
+        x:{
+          ticks:{
+            color:"#fff"
+          }
+        },
+
+        y:{
+          ticks:{
+            color:"#fff"
+          },
+
+          beginAtZero:true,
+          max:100
+        }
+      }
+    }
+  });
+}
+
+</script>
+
+</body>
+</html>
